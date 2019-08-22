@@ -1,13 +1,17 @@
 {
-  "name": "zerorpc",
+  "name": "zerorpc-custom",
   "version": "0.9.8",
   "main": "./index.js",
-  "author": "François-Xavier Bourlet <bombela+zerorpc@gmail.com>",
+  "author": "Patrik Kjaerran <patrikkja@gmail.com>",
   "description": "A port of ZeroRPC to node.js",
   "contributors": [
     {
       "name": "Francois-Xavier Bourlet",
       "email": "bombela@gmail.com"
+    },
+    {
+      "name": "Patrik Kjareean",
+      "email": "patrikkja@gmail.com"
     },
     {
       "name": "Yusuf Simonson",
@@ -34,6 +38,7 @@
     "zeromq": "^4.6.0"
   },
   "devDependencies": {
+    "electron-rebuild": "^1.8.6",
     "nodeunit": "0.9.1",
     "temp": "0.8.1"
   },
