@@ -1,0 +1,5 @@
+Prebuilt for Electron 6.0.3
+To rebuild:
+    Download this repo
+    Install 'electron-rebuild' using 'npm install --save-dev electron-rebuild'
+    Rebuild using 'electron-rebuild' by invoking './node_modules/.bin/electron-rebuild --version=TARGET_ELECTRON_VERSION'
