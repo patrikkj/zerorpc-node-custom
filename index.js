@@ -25,5 +25,5 @@ var server = require("./lib/server"),
     client = require("./lib/client");
 
 exports.Server = server.Server;
-exports.CustomServer = server.CustomServer;
+// exports.CustomServer = server.CustomServer;
 exports.Client = client.Client;
