@@ -5,8 +5,6 @@ var socket = require("./socket"),
     util = require("./util"),
     middleware = require("./middleware");
 
-const pEvent = require("C:\\Users\\Patrik\\Git\\p-event");
-
 var DEFAULT_TIMEOUT = 30;
 
 // Creates a new client
@@ -47,24 +45,20 @@ class Client extends events.EventEmitter {
         return this._socket.closed();
     }
 
-    invokePromise(event, ...args) {
-        var channel = this.invoke.apply(this, [event].concat(args))
-        var id = channel.id
-        return pEvent(channel, `${id}--reply`)
-    }
-
+    //Calls a remote method
+    //options: Object
+    //      Optional options object to override the constructor options (currently only timeout)
+    //method : String
+    //      The method name
+    //args... : Varargs
+    //      The arguments to send with the invocation
+    //callback : Function
+    //      The callback to call on an update
     invoke(/*options, */ method /*, args..., callback*/) {
         var self = this;
         var hasCallback = typeof arguments[arguments.length - 1] == 'function';
         var callback = hasCallback ? arguments[arguments.length - 1] : function () { };
-        var options = typeof method === 'object' ?
-            method :
-            undefined;
         var offset = 1;
-        if (options === method) {
-            method = arguments[1];
-            offset = 2;
-        }
         var args = Array.prototype.slice.call(arguments, offset, hasCallback ? arguments.length - 1 : arguments.length);
         var alreadyCalled = false;
         var callbackErrorWrapper = function (error) {
@@ -88,9 +82,6 @@ class Client extends events.EventEmitter {
             },
             "OK": function (event) {
                 callback(undefined, event.args[0], false);
-                var eventName = `${event.header.response_to}--reply`
-                console.log(`Emitting custom invocation response for event: ${eventName}`);
-                ch.emit(eventName, event.args[0])
                 ch.close();
             }
             // ,
@@ -116,10 +107,7 @@ class Client extends events.EventEmitter {
             }
         });
         ch.send(method, args);
-        return ch
     }
-
-
 }
 
 exports.Client = Client;

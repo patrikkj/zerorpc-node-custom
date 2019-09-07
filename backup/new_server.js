@@ -52,47 +52,33 @@ function getAllMethods(object) {
 
 
 class Server extends events.EventEmitter {
-    // constructor(context, cls) {
-    constructor(cls) {
+    constructor(object) {
         super();
         var self = this;
         
         self._socket = socket.server();
         util.eventProxy(self._socket, self, "error");
         
-        self._methods_cls = getAllMethods(cls);
+        // self._methods = getAllMethods(object);
+        // self._methods_two = publicMethods(object);
 
-        self._socket.on("multiplexing-socket/receive", function (event) {
-            if (self._methods_cls.includes(event.name)){
-                self._recv(event, cls);
-            }
+        self._socket.on("multiplexing-socket/receive", event => {
+            if (event.name in getAllMethods(object))
+                self._recv(event, object);
         });
     }
 
     //Called when a method call event is received
     //event : Object
     //      The ZeroRPC event
-    //context : Object
+    //object : Object
     //      The object to expose.
-    _recv(event, context) {
+    _recv(event, object) {
         //Execute and send output back to the client
         var ch = this._socket.openChannel(event);
-        var output = context[event.name].apply(context, event.args);
+        var output = object[event.name].apply(object, event.args);
         ch.send("OK", [output]);
     }
-
-     //Called when a method call event is received
-    //event : Object
-    //      The ZeroRPC event
-    //context : Object
-    //      The object to expose.
-    _recv_cls(event, cls) {
-        //Execute and send output back to the client
-        var ch = this._socket.openChannel(event);
-        var output = cls[event.name].apply(cls, event.args);
-        ch.send("OK", [output]);
-    }
-
     //Binds to a ZeroMQ endpoint
     //endpoint : String
     //      The ZeroMQ endpoint
